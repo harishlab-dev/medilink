@@ -41,6 +41,13 @@ export interface Appointment {
   date?: string;
   start_time?: string;
 }
+export interface MedicineForm {
+  medicine_name: string;
+}
+export interface PrescriptionForm {
+  doctor_id: number | string;
+  diagnosis: string;
+}
 
 export interface Prescription {
   prescription_id: number;

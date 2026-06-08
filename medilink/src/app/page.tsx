@@ -1,32 +1,21 @@
-"use client";
+import { Navbar } from "@/components/landing/navbar";
+import { Hero } from "@/components/landing/hero";
+import { Features } from "@/components/landing/features";
+import { HowItWorks } from "@/components/landing/how-it-works";
+import { Testimonials } from "@/components/landing/testimonials";
+import { CTA } from "@/components/landing/cta";
+import { Footer } from "@/components/landing/footer";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-
-export default function HomePage() {
-  const router = useRouter();
-
-  useEffect(() => {
-    try {
-      // Check localStorage synchronously
-      const user = localStorage.getItem("medilink_user");
-      
-      if (user) {
-        router.replace("/dashboard");
-      } else {
-        router.replace("/auth/login");
-      }
-    } catch (error) {
-      router.replace("/auth/login");
-    }
-  }, [router]);
-
+export default function Home() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50">
-      <div className="flex flex-col items-center gap-3">
-        <div className="w-5 h-5 border-2 border-teal-200 border-t-teal-600 rounded-full animate-spin" />
-        <p className="text-sm text-slate-400">Loading...</p>
-      </div>
-    </div>
+    <main className="min-h-screen">
+      <Navbar />
+      <Hero />
+      <Features />
+      <HowItWorks />
+      <Testimonials />
+      <CTA />
+      <Footer />
+    </main>
   );
 }

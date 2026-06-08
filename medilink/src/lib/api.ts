@@ -28,6 +28,8 @@ export interface Hospital {
 
 export interface Appointment {
   appointment_id: number;
+  slot_id: number;
+  patient_id: number;
   patient_name?: string;
   doctor_name?: string;
   date?: string;
@@ -44,12 +46,17 @@ export interface AvailabilitySlot {
 
 export interface Prescription {
   prescription_id: number;
-  doctor_name?: string;
+  doctor_id: number;
   diagnosis: string;
+  doctor_name?: string;
 }
 
 export interface Medicine {
   medicine_id: number;
+  medicine_name: string;
+}
+
+export interface MedicineForm {
   medicine_name: string;
 }
 

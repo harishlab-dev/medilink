@@ -157,3 +157,45 @@
     border-radius: 20px;
   }
 }
+:root {
+  --background: #f3fbfa;
+  --foreground: #0f172a;
+
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+
+  --primary: #0d9488;
+  --primary-foreground: #ffffff;
+
+  --secondary: #dff5f3;
+  --secondary-foreground: #0f172a;
+
+  --accent: #22c55e;
+  --accent-foreground: #ffffff;
+
+  --border: #dbe7e5;
+  --input: #dbe7e5;
+  --ring: #0d9488;
+
+  --radius: 0.75rem;
+}
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}

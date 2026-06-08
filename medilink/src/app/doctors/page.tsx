@@ -36,6 +36,7 @@ export default function DoctorsPage() {
     setError("");
     try {
       const [d, h] = await Promise.all([doctorsApi.getAll(), hospitalsApi.getAll()]);
+      console.log(d);
       setDoctors(d);
       setFiltered(d);
       setHospitals(h);
@@ -86,10 +87,14 @@ export default function DoctorsPage() {
     setSaving(true);
     setFormError("");
     try {
+      const dataToSend = {
+        ...form,
+        hospital_id: Number(form.hospital_id),
+      };
       if (editTarget) {
-        await doctorsApi.update(editTarget.doctor_id, form);
+        await doctorsApi.update(editTarget.doctor_id, dataToSend);
       } else {
-        await doctorsApi.create(form);
+        await doctorsApi.create(dataToSend);
       }
       setModalOpen(false);
       load();
@@ -157,7 +162,7 @@ export default function DoctorsPage() {
                   <th className="table-header">ID</th>
                   <th className="table-header">Name</th>
                   <th className="table-header">Email</th>
-                  <th className="table-header">Specialization</th>
+                  <th className="table-header">Hospital ID</th>
                   <th className="table-header">Hospital</th>
                   <th className="table-header text-right">Actions</th>
                 </tr>
@@ -176,10 +181,12 @@ export default function DoctorsPage() {
                     </td>
                     <td className="table-cell text-slate-500">{d.email}</td>
                     <td className="table-cell">
-                      <span className="badge-blue">{d.specialization || "General"}</span>
-                    </td>
-                    <td className="table-cell text-slate-600">
-                      {d.hospital_name || getHospitalName(d.hospital_id)}
+                    <span className="badge-slate">
+                    #{d.hospital_id}
+                    </span>
+                   </td>
+                   <td className="table-cell text-slate-600">
+                    {d.hospital_name || getHospitalName(d.hospital_id)}
                     </td>
                     <td className="table-cell">
                       <div className="flex items-center gap-2 justify-end">
@@ -215,7 +222,7 @@ export default function DoctorsPage() {
             </select>
           </FormField>
           <FormField label="Hospital">
-            <select className="input-field" value={form.hospital_id} onChange={(e) => setForm({ ...form, hospital_id: e.target.value })}>
+            <select className="input-field" value={form.hospital_id} onChange={(e) => setForm({ ...form, hospital_id: e.target.value ? Number(e.target.value) : "" })}>
               <option value="">Select hospital</option>
               {hospitals.map((h) => <option key={h.hospital_id} value={h.hospital_id}>{h.name}</option>)}
             </select>

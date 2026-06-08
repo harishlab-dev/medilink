@@ -49,7 +49,10 @@ export default function AvailabilityPage() {
     setSaving(true);
     setFormError("");
     try {
-      await availabilityApi.create(form);
+      await availabilityApi.create({
+        ...form,
+        doctor_id: Number(form.doctor_id),
+      });
       setModalOpen(false);
       load();
     } catch (e: any) {
@@ -102,22 +105,29 @@ export default function AvailabilityPage() {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-slate-100">
-                  <th className="table-header">Slot ID</th>
-                  <th className="table-header">Doctor</th>
-                  <th className="table-header">Date</th>
-                  <th className="table-header">Start Time</th>
-                  <th className="table-header text-right">Action</th>
+                <th className="table-header">Slot ID</th>
+                <th className="table-header">Doctor ID</th>
+                <th className="table-header">Doctor</th>
+                <th className="table-header">Date</th>
+                <th className="table-header">Start Time</th>
+                <th className="table-header text-right">Action</th>
                 </tr>
-              </thead>
+                </thead>
               <tbody>
                 {slots.map((s) => (
                   <tr key={s.slot_id} className="table-row">
                     <td className="table-cell"><span className="badge-slate">#{s.slot_id}</span></td>
                     <td className="table-cell">
-                      <span className="font-medium text-slate-800">
-                        {s.doctor_name || getDoctorName(s.doctor_id)}
-                      </span>
-                    </td>
+  <span className="badge-slate">
+    #{s.doctor_id}
+  </span>
+</td>
+
+<td className="table-cell">
+  <span className="font-medium text-slate-800">
+    {s.doctor_name || getDoctorName(s.doctor_id)}
+  </span>
+</td>
                     <td className="table-cell text-slate-600">{s.date}</td>
                     <td className="table-cell">
                       <span className="badge-teal">{s.start_time}</span>

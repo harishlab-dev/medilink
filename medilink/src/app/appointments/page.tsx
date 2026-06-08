@@ -65,7 +65,11 @@ export default function AppointmentsPage() {
     setSaving(true);
     setFormError("");
     try {
-      await appointmentsApi.create(form);
+      await appointmentsApi.create({
+        ...form,
+        slot_id: Number(form.slot_id),
+        patient_id: Number(form.patient_id),
+      });
       setModalOpen(false);
       load();
     } catch (e: any) {
@@ -117,45 +121,73 @@ export default function AppointmentsPage() {
           <div className="overflow-x-auto -mx-6 px-6">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-slate-100">
-                  <th className="table-header">ID</th>
-                  <th className="table-header">Patient</th>
-                  <th className="table-header">Slot</th>
-                  <th className="table-header">Diagnosis</th>
-                  <th className="table-header text-right">Action</th>
-                </tr>
-              </thead>
+  <tr className="border-b border-slate-100">
+    <th className="table-header">Appointment ID</th>
+    <th className="table-header">Patient ID</th>
+    <th className="table-header">Patient</th>
+    <th className="table-header">Slot ID</th>
+    <th className="table-header">Diagnosis</th>
+    <th className="table-header text-right">Action</th>
+  </tr>
+</thead>
               <tbody>
-                {appointments.map((a) => (
-                  <tr key={a.appointment_id} className="table-row">
-                    <td className="table-cell"><span className="badge-slate">#{a.appointment_id}</span></td>
-                    <td className="table-cell">
-                      <div className="flex items-center gap-2.5">
-                        <div className="w-7 h-7 bg-teal-100 rounded-full flex items-center justify-center flex-shrink-0">
-                          <span className="text-xs font-semibold text-teal-700">
-                            {getPatientName(a.patient_id).charAt(0).toUpperCase()}
-                          </span>
-                        </div>
-                        <span className="font-medium text-slate-800">{a.patient_name || getPatientName(a.patient_id)}</span>
-                      </div>
-                    </td>
-                    <td className="table-cell text-slate-500">{getSlotInfo(a.slot_id)}</td>
-                    <td className="table-cell">
-                      <span className="text-slate-600">{a.diagnosis || <span className="text-slate-300 italic">None</span>}</span>
-                    </td>
-                    <td className="table-cell">
-                      <div className="flex justify-end">
-                        <button
-                          onClick={() => setCancelTarget(a)}
-                          className="btn-danger text-xs py-1.5 px-3"
-                        >
-                          <X className="w-3 h-3" /> Cancel
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
+  {appointments.map((a) => (
+    <tr key={a.appointment_id} className="table-row">
+      <td className="table-cell">
+        <span className="badge-slate">
+          #{a.appointment_id}
+        </span>
+      </td>
+
+      <td className="table-cell">
+        <span className="badge-slate">
+          #{a.patient_id}
+        </span>
+      </td>
+
+      <td className="table-cell">
+        <div className="flex items-center gap-2.5">
+          <div className="w-7 h-7 bg-teal-100 rounded-full flex items-center justify-center flex-shrink-0">
+            <span className="text-xs font-semibold text-teal-700">
+              {getPatientName(a.patient_id).charAt(0).toUpperCase()}
+            </span>
+          </div>
+          <span className="font-medium text-slate-800">
+            {a.patient_name || getPatientName(a.patient_id)}
+          </span>
+        </div>
+      </td>
+
+      <td className="table-cell">
+        <span className="badge-slate">
+          #{a.slot_id}
+        </span>
+      </td>
+
+      <td className="table-cell">
+        <span className="text-slate-600">
+          {a.diagnosis || (
+            <span className="text-slate-300 italic">
+              None
+            </span>
+          )}
+        </span>
+      </td>
+
+      <td className="table-cell">
+        <div className="flex justify-end">
+          <button
+            onClick={() => setCancelTarget(a)}
+            className="btn-danger text-xs py-1.5 px-3"
+          >
+            <X className="w-3 h-3" />
+            Cancel
+          </button>
+        </div>
+      </td>
+    </tr>
+  ))}
+</tbody>
             </table>
           </div>
         )}
@@ -165,11 +197,23 @@ export default function AppointmentsPage() {
         <div className="space-y-4">
           {formError && <div className="p-3 bg-red-50 border border-red-100 rounded-xl text-sm text-red-600">{formError}</div>}
           <FormField label="Patient">
-            <select className="input-field" value={form.patient_id} onChange={(e) => setForm({ ...form, patient_id: e.target.value })}>
-              <option value="">Select patient</option>
-              {patients.map((p) => <option key={p.patient_id} value={p.patient_id}>{p.name}</option>)}
-            </select>
-          </FormField>
+  <select
+    className="input-field"
+    value={form.patient_id}
+    onChange={(e) => setForm({ ...form, patient_id: e.target.value })}
+  >
+    <option value="">Select patient</option>
+
+    {patients.map((p) => (
+      <option
+        key={p.patient_id}
+        value={p.patient_id}
+      >
+        #{p.patient_id} - {p.name}
+      </option>
+    ))}
+  </select>
+</FormField>
           <FormField label="Availability Slot">
             <select className="input-field" value={form.slot_id} onChange={(e) => setForm({ ...form, slot_id: e.target.value })}>
               <option value="">Select slot</option>

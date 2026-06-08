@@ -55,18 +55,19 @@ def get_doctors():
     conn = get_db_connection()
 
     doctors = conn.execute("""
-        SELECT
-            Doctor.doctor_id,
-            Doctor.name,
-            Doctor.email,
-            Hospital.name AS hospital_name,
-            Hospital.location
+    SELECT
+        Doctor.doctor_id,
+        Doctor.name,
+        Doctor.email,
+        Doctor.hospital_id,
+        Hospital.name AS hospital_name,
+        Hospital.location
 
-        FROM Doctor
+    FROM Doctor
 
-        JOIN Hospital
-        ON Doctor.hospital_id = Hospital.hospital_id
-    """).fetchall()
+    JOIN Hospital
+    ON Doctor.hospital_id = Hospital.hospital_id
+""").fetchall()
 
     conn.close()
 
@@ -101,25 +102,27 @@ def get_appointments():
     conn = get_db_connection()
 
     appointments = conn.execute("""
-        SELECT
-            Appointment.appointment_id,
-            Patient.name AS patient_name,
-            Doctor.name AS doctor_name,
-            Availability_Slot.date,
-            Availability_Slot.start_time,
-            Appointment.diagnosis
+    SELECT
+        Appointment.appointment_id,
+        Appointment.patient_id,
+        Appointment.slot_id,
+        Appointment.diagnosis,
+        Patient.name AS patient_name,
+        Doctor.name AS doctor_name,
+        Availability_Slot.date,
+        Availability_Slot.start_time
 
-        FROM Appointment
+    FROM Appointment
 
-        JOIN Patient
-        ON Appointment.patient_id = Patient.patient_id
+    JOIN Patient
+    ON Appointment.patient_id = Patient.patient_id
 
-        JOIN Availability_Slot
-        ON Appointment.slot_id = Availability_Slot.slot_id
+    JOIN Availability_Slot
+    ON Appointment.slot_id = Availability_Slot.slot_id
 
-        JOIN Doctor
-        ON Availability_Slot.doctor_id = Doctor.doctor_id
-    """).fetchall()
+    JOIN Doctor
+    ON Availability_Slot.doctor_id = Doctor.doctor_id
+""").fetchall()
 
     conn.close()
 
@@ -136,11 +139,12 @@ def get_prescriptions():
     conn = get_db_connection()
 
     prescriptions = conn.execute("""
-        SELECT
-            Prescription.prescription_id,
-            Doctor.name AS doctor_name,
-            Prescription.diagnosis
-
+       SELECT
+    Prescription.prescription_id,
+    Prescription.doctor_id,
+    Doctor.name AS doctor_name,
+    Prescription.diagnosis
+                                 
         FROM Prescription
 
         JOIN Doctor
